@@ -1,0 +1,8 @@
+const express = require("express");
+const graphqlHTTP = require("express-graphql");
+
+const app = express();
+
+app.use("/graphql", graphqlHTTP({})); // handle graphqh at this route
+
+app.listen(8000, () => console.log("App running"));
