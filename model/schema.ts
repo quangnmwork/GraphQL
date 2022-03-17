@@ -10,15 +10,15 @@ const {
 } = graphql;
 
 const books = [
-  { name: "The wind", genre: "Fantasy", id: 1 },
-  { name: "The wind", genre: "Fantasy", id: 2 },
-  { name: "The wind", genre: "Fantasy", id: 3 },
+  { name: "The wind", genre: "Fantasy", id: 1, authorId: 1 },
+  { name: "The wind", genre: "Fantasy", id: 2, authorId: 2 },
+  { name: "The wind", genre: "Fantasy", id: 3, authorId: 2 },
 ];
 
 const authors = [
-  { name: "The wind", age: 12, id: 1 },
-  { name: "The wind", age: 15, id: 2 },
-  { name: "The wind", age: 22, id: 3 },
+  { name: "Gabriel", age: 12, id: 1 },
+  { name: "Max", age: 15, id: 2 },
+  { name: "Wind", age: 22, id: 3 },
 ];
 
 const BookType = new GraphQLObjectType({
@@ -31,6 +31,13 @@ const BookType = new GraphQLObjectType({
     genre: {
       type: GraphQLString,
     },
+    // author: {
+    //   type: AuthorType,
+    //   resolve(parent: any, args: any) {
+    //     console.log(parent, args);
+    //     return lodash.find(authors, { id: parent.authorId });
+    //   },
+    // },
   }),
 });
 
@@ -55,9 +62,10 @@ const RootQuery = new GraphQLObjectType({
       args: {
         id: { type: GraphQLID },
       },
-      resolve(parent: any, args: { id: { type: typeof GraphQLID } }) {
+      resolve(parent: any, args: { id: { type: GraphQLID } }) {
         // code to get data from db or other source
-        console.log(parent);
+        // console.log(parent);
+        console.log(lodash.find(books, { id: args.id }));
         return lodash.find(books, { id: args.id });
       },
     },
