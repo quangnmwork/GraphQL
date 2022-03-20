@@ -14,7 +14,6 @@ interface SaveBookInput {
 const addBookGQL = gql`
   mutation AddBook($name: String!, $genre: String!, $authorId: String!) {
     addBook(name: $name, genre: $genre, authorId: $authorId) {
-      authorId
       name
       genre
     }
@@ -23,7 +22,7 @@ const addBookGQL = gql`
 
 const Form = () => {
   const { register, handleSubmit, getValues } = useForm<BookInput>();
-  const [mutation, { error, data }] = useMutation<
+  const [addBook, { error, data }] = useMutation<
     { saveBook: SaveBookInput },
     { name: string; genre: string; authorId: string }
   >(addBookGQL, {
@@ -33,8 +32,8 @@ const Form = () => {
       authorId: getValues("authorId"),
     },
   });
-  const submitHandler: SubmitHandler<BookInput> = (data) => {
-    mutation().catch((err) => console.log(err));
+  const submitHandler: SubmitHandler<BookInput> = () => {
+    addBook().catch((err) => console.log(err));
   };
   return (
     <div className="mt-10">

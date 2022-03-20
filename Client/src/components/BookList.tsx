@@ -22,13 +22,14 @@ const BookList: React.FC<{}> = () => {
     return <p> loading</p>;
   } else if (error) {
     console.log(error);
-    return <p>There is an error</p>;
+    return <p className="text-center">There is an error</p>;
   }
+  console.log(data);
   return (
     <div className="flex flex-col items-center mt-5 relative -z-10">
       {data.books.map((book: IBook) => (
         <Book
-          id={book.name}
+          id={book.id}
           name={book.name}
           author={book.author}
           key={book.id}
