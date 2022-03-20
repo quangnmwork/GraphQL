@@ -5,10 +5,16 @@ interface BookInput {
   genre: string;
   authorId: string;
 }
+interface SaveBookInput {
+  name: string;
+  genre: string;
+  authorId: string;
+}
 
 const addBookGQL = gql`
-  mutation {
-    addBook($book : BookInput!) {
+  mutation AddBook($name: String!, $genre: String!, $authorId: String!) {
+    addBook(name: $name, genre: $genre, authorId: $authorId) {
+      authorId
       name
       genre
     }
@@ -16,9 +22,20 @@ const addBookGQL = gql`
 `;
 
 const Form = () => {
-  const { register, handleSubmit } = useForm<BookInput>();
-  //   const mutation = useMutation<{bookInput:BookInput}>()
-  const submitHandler: SubmitHandler<BookInput> = (data) => {};
+  const { register, handleSubmit, getValues } = useForm<BookInput>();
+  const [mutation, { error, data }] = useMutation<
+    { saveBook: SaveBookInput },
+    { name: string; genre: string; authorId: string }
+  >(addBookGQL, {
+    variables: {
+      name: getValues("name"),
+      genre: getValues("genre"),
+      authorId: getValues("authorId"),
+    },
+  });
+  const submitHandler: SubmitHandler<BookInput> = (data) => {
+    mutation().catch((err) => console.log(err));
+  };
   return (
     <div className="mt-10">
       <form className="">
@@ -43,6 +60,10 @@ const Form = () => {
           </button>
         </div>
       </form>
+      {error ? <p className="text-center">Oh no! {error.message}</p> : null}
+      {data && data.saveBook ? (
+        <p className="text-center">Saved Book!</p>
+      ) : null}
     </div>
   );
 };
