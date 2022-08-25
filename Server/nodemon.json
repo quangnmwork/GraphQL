@@ -1,6 +1,0 @@
-{
-  "watch": "*/**/*.ts",
-  "execMap": {
-    "ts": "npx ts-node"
-  }
-}
